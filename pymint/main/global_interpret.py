@@ -1466,7 +1466,6 @@ class GlobalInterpret(Attributes):
                 ]
             )
 
-            
             # Sum the ALE values per X and add on the average value
             main_effects = np.sum(main_effects.T, axis=1) + avg_prediction
 

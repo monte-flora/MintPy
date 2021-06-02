@@ -144,6 +144,8 @@ class PlotImportance(PlotStructure):
         
         # y = rows (different metrics, different perm. directions)
         for ylabel, (g, results) in zip(ylabels, enumerate(data)):
+            print(ylabel, g, results) 
+            
             # x = columns (different models, different methods)
             for (k, xlabel), estimator_name in zip(enumerate(xlabels), estimator_names):
                 if np.ndim(axes) == 1:
@@ -270,13 +272,13 @@ class PlotImportance(PlotStructure):
                     size = kwargs.get('fontsize', self.FONT_SIZES["teensie"]) 
 
                 # Put the variable names _into_ the plot
-                if estimator_output == "probability" and 'perm_based' not in method:
+                if estimator_output == "probability" and method not in ['perm_based', 'coefs']:
                     x_pos = 0.0
                     ha = ["left"] * len(variable_names_to_plot)
-                elif estimator_output == "raw" and 'perm_based' not in method:
+                elif estimator_output == "raw" and method not in ['perm_based', 'coefs']:
                     x_pos = 0.05
                     ha = ["left"] * len(variable_names_to_plot)
-                else:
+                else: 
                     x_pos = 0
                     ha = ["left" if score > 0 else "right" for score in scores_to_plot] 
 
@@ -338,24 +340,16 @@ class PlotImportance(PlotStructure):
                         alpha=0.7,
                     )
 
-                #if (
-                #    estimator_output == "probability"
-                #    and "ale_variance" not in method
-                #    and xticks is None
-                #):
-                    # Most probability-based scores are between 0-1 (AUC, BSS, NAUPDC,etc.)
-                #    xticks = [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-
                 ax.tick_params(axis="both", which="both", length=0)
                 ax.set_yticks([])
                 
                 if estimator_output == "probability" and "pass" in method:
                     upper_limit = min(1.1 * np.nanmax(scores_to_plot), 1.0)
                     ax.set_xlim([0, upper_limit])
-                elif "perm_based" in method:
+                elif ("perm_based" in method) or ('coefs' in method):
                     upper_limit = max(1.1 * np.nanmax(scores_to_plot), 0.01)
                     lower_limit = min(1.1 * np.nanmin(scores_to_plot), -0.01)
-                    ax.set_xlim([lower_limit, upper_limit])    
+                    ax.set_xlim([lower_limit, upper_limit])   
                 else:
                     upper_limit = 1.1 * np.nanmax(scores_to_plot)
                     ax.set_xlim([0, upper_limit])

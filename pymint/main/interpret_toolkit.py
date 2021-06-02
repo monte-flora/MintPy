@@ -182,7 +182,8 @@ class InterpretToolkit(Attributes):
         return ds
     
     def permutation_importance(self, n_vars, evaluation_fn, direction='backward',
-            subsample=1.0, n_jobs=1, n_bootstrap=None, scoring_strategy=None, verbose=False, random_state=None ):
+            subsample=1.0, n_jobs=1, n_bootstrap=None, scoring_strategy=None, verbose=False, random_state=None,
+                              return_iterations=False):
         """
         Performs single-pass and/or multi-pass permutation importance using a modified version of the
         PermutationImportance package (pymint.PermutationImportance) [1]_. The single-pass approach was first 
@@ -323,7 +324,8 @@ class InterpretToolkit(Attributes):
                                                     scoring_strategy=scoring_strategy,
                                                     verbose=verbose,
                                                     direction=direction,
-                                                    random_state=random_state
+                                                    random_state=random_state,
+                                                    return_iterations=return_iterations,
                                                    )
         
         self.attrs_dict['n_multipass_vars'] = n_vars
